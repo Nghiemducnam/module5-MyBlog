@@ -1,6 +1,7 @@
 package com.codeGym.services.impl;
 
 import com.codeGym.models.Category;
+import com.codeGym.models.Exceptions.InvalidException;
 import com.codeGym.repositories.CategoryRepository;
 import com.codeGym.services.CategoryService;
 import org.hibernate.exception.ConstraintViolationException;
@@ -17,15 +18,24 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
     @Autowired
     private CategoryService categoryService;
+
     @Override
     public void saveCategory(Category category) {
         categoryRepository.save(category);
     }
 
     @Override
-    public void deleteCategory(Long id) {
-        categoryRepository.deleteById(id);
+    public void deleteCategory(Long id) throws SQLException {
+        Optional<Category> category = categoryRepository.findById(id);
 
+        if (!category.isPresent()) {
+            throw new InvalidException("THE CATEGORY IS NOT FOUND");
+        }
+        try {
+            categoryRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new SQLException("You can't delete this category");
+        }
     }
 
     @Override
