@@ -4,7 +4,6 @@ import com.codeGym.models.Category;
 import com.codeGym.models.Exceptions.InvalidException;
 import com.codeGym.repositories.CategoryRepository;
 import com.codeGym.services.CategoryService;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +44,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Optional<Category> findByCategoryId(Long id) {
-        return categoryRepository.findById(id);
+        Optional<Category> thisCategory = categoryRepository.findById(id);
+        if(!thisCategory.isPresent()){
+            throw new InvalidException("THE CATEGORY NOT FOUND!");
+        }
+        return thisCategory;
     }
 }

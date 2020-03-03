@@ -27,39 +27,39 @@ public class CategoryController {
 
     @PostMapping("/category")
     ResponseEntity<Category> createCategory(@RequestBody Category category, UriComponentsBuilder ucBuilder) {
-        categoryService.saveCategory(category);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/api/admin/category/{id}").buildAndExpand(category.getCategoryId()).toUri());
-        return new ResponseEntity<Category>(headers, HttpStatus.CREATED);
+        try {
+            categoryService.saveCategory(category);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(ucBuilder.path("/api/admin/category/{id}").buildAndExpand(category.getCategoryId()).toUri());
+            return new ResponseEntity<Category>(headers, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/category/{id}")
     ResponseEntity<ResponseMessage> getCategoryById(@PathVariable("id") Long id) {
-        Optional<Category> thisCategory = categoryService.findByCategoryId(id);
-        if (!thisCategory.isPresent()) {
-            return new ResponseEntity<>(new ResponseMessage<>(
-                    false, "Not found category", null), HttpStatus.NOT_FOUND);
+        try {
+            Optional<Category> thisCategory = categoryService.findByCategoryId(id);
+            return new ResponseEntity<>(new ResponseMessage<>(true, "success", thisCategory), HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseMessage<>(false, e.getMessage(), null), HttpStatus.NOT_FOUND);
+
         }
-        return new ResponseEntity<>(new ResponseMessage<>(true, "get category is successful", thisCategory), HttpStatus.OK);
     }
 
-//    @DeleteMapping("/category/{id}")
-//    HttpEntity<?> deleteCategory(@PathVariable("id") Long id) {
-//        Optional<Category> currentCategory = categoryService.findByCategoryId(id);
-//
-//        if(!currentCategory.isPresent()){
-//            return new ResponseEntity<Category>(HttpStatus.NOT_FOUND);
-//        }else {
-//            List<Post> postList = postService.findAllByCategory_CategoryId(id);
-//            for(Post post: postList){
-//                postService.deletePost(post);
-//            }
-//            categoryService.deleteCategory(id);
-//            return new ResponseEntity<Category>(HttpStatus.NO_CONTENT);
-//        }
-//
-//
-//    }
+    @GetMapping("/category")
+    public ResponseEntity<ResponseMessage> getAllCategoryList(){
+        try {
+            List<Category> categoryList = categoryService.findAllCategory();
+            return new ResponseEntity<ResponseMessage>(new ResponseMessage<>(
+                    true, "Success", categoryList), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<ResponseMessage>(new ResponseMessage(
+                    false, "The system has some error",null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @DeleteMapping("/category/{id}")
     HttpEntity<ResponseMessage> deleteCategory(@PathVariable("id") Long id) {
@@ -77,4 +77,20 @@ public class CategoryController {
 
         }
     }
+
+    //    @DeleteMapping("/category/{id}")
+//    HttpEntity<?> deleteCategory(@PathVariable("id") Long id) {
+//        Optional<Category> currentCategory = categoryService.findByCategoryId(id);
+//
+//        if(!currentCategory.isPresent()){
+//            return new ResponseEntity<Category>(HttpStatus.NOT_FOUND);
+//        }else {
+//            List<Post> postList = postService.findAllByCategory_CategoryId(id);
+//            for(Post post: postList){
+//                postService.deletePost(post);
+//            }
+//            categoryService.deleteCategory(id);
+//            return new ResponseEntity<Category>(HttpStatus.NO_CONTENT);
+//        }
+//    }
 }
