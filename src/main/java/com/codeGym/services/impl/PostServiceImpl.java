@@ -15,7 +15,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findAllByCategory_CategoryId(Long category_id) {
-        return postRepository.findAllByCategory_CategoryId(category_id);
+        return postRepository.findAllByCategory_Id(category_id);
     }
 
     @Override

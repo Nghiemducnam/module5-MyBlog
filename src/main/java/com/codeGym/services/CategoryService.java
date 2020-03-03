@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CategoryService {
-    void saveCategory(Category category);
+    void createCategory(Category category);
+    void editCategory(Category category, Long id);
     void deleteCategory(Long id) throws SQLException;
     List<Category>findAllCategory();
     Optional<Category> findByCategoryId(Long id);
+
    
 
 }

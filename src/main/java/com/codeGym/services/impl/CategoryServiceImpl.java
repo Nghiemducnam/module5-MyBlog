@@ -19,8 +19,23 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryService categoryService;
 
     @Override
-    public void saveCategory(Category category) {
-        categoryRepository.save(category);
+    public void createCategory(Category category) {
+        try {
+            categoryRepository.save(category);
+        } catch (InvalidException e) {
+            throw new InvalidException("there are some problems");
+        }
+    }
+
+    @Override
+    public void editCategory(Category category, Long id) {
+        Optional<Category> currentCategory = categoryRepository.findById(id);
+        if (!currentCategory.isPresent()) {
+            throw new InvalidException("THE CATEGORY IS NOT FOUND");
+        }
+//        currentCategory.get().setId(category.getId());
+        currentCategory.get().setCategoryName(category.getCategoryName());
+        categoryRepository.save(currentCategory.get());
     }
 
     @Override
@@ -44,8 +59,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Optional<Category> findByCategoryId(Long id) {
-        Optional<Category> thisCategory = categoryRepository.findById(id);
-        if(!thisCategory.isPresent()){
+        Optional<Category> thisCategory = categoryRepository.getCategoryById(id);
+        if (!thisCategory.isPresent()) {
             throw new InvalidException("THE CATEGORY NOT FOUND!");
         }
         return thisCategory;

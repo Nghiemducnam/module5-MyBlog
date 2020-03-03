@@ -2,7 +2,6 @@ package com.codeGym.controllers;
 
 import com.codeGym.models.Category;
 import com.codeGym.models.Exceptions.InvalidException;
-import com.codeGym.models.Post;
 import com.codeGym.models.ResponseMessage;
 import com.codeGym.services.CategoryService;
 import com.codeGym.services.PostService;
@@ -28,9 +27,9 @@ public class CategoryController {
     @PostMapping("/category")
     ResponseEntity<Category> createCategory(@RequestBody Category category, UriComponentsBuilder ucBuilder) {
         try {
-            categoryService.saveCategory(category);
+            categoryService.createCategory(category);
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(ucBuilder.path("/api/admin/category/{id}").buildAndExpand(category.getCategoryId()).toUri());
+            headers.setLocation(ucBuilder.path("/api/admin/category/{id}").buildAndExpand(category.getId()).toUri());
             return new ResponseEntity<Category>(headers, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -75,6 +74,18 @@ public class CategoryController {
             return new ResponseEntity<>(new ResponseMessage(
                     false, e.getMessage(), null), HttpStatus.INTERNAL_SERVER_ERROR);
 
+        }
+    }
+
+    @PutMapping("/category/{id}")
+    HttpEntity<ResponseMessage> updateCategory(@PathVariable("id") Long id, @RequestBody Category category) {
+        try {
+            categoryService.editCategory(category, id);
+            return new ResponseEntity<>(new ResponseMessage(
+                    true, "Okay", category), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(new ResponseMessage(
+                    false, e.getMessage(), null), HttpStatus.NOT_FOUND);
         }
     }
 
