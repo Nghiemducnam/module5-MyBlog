@@ -2,6 +2,7 @@ package com.codeGym.controllers;
 
 import com.codeGym.models.Category;
 import com.codeGym.models.Exceptions.InvalidException;
+import com.codeGym.models.Post;
 import com.codeGym.models.ResponseMessage;
 import com.codeGym.services.CategoryService;
 import com.codeGym.services.PostService;
@@ -21,8 +22,6 @@ import java.util.Optional;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
-    @Autowired
-    private PostService postService;
 
     @PostMapping("/category")
     ResponseEntity<Category> createCategory(@RequestBody Category category, UriComponentsBuilder ucBuilder) {
@@ -49,14 +48,14 @@ public class CategoryController {
     }
 
     @GetMapping("/category")
-    public ResponseEntity<ResponseMessage> getAllCategoryList(){
+    public ResponseEntity<ResponseMessage> getAllCategoryList() {
         try {
             List<Category> categoryList = categoryService.findAllCategory();
             return new ResponseEntity<ResponseMessage>(new ResponseMessage<>(
                     true, "Success", categoryList), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<ResponseMessage>(new ResponseMessage(
-                    false, "The system has some error",null), HttpStatus.INTERNAL_SERVER_ERROR);
+                    false, "The system has some error", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -83,11 +82,13 @@ public class CategoryController {
             categoryService.editCategory(category, id);
             return new ResponseEntity<>(new ResponseMessage(
                     true, "Okay", category), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(new ResponseMessage(
                     false, e.getMessage(), null), HttpStatus.NOT_FOUND);
         }
     }
+
+
 
     //    @DeleteMapping("/category/{id}")
 //    HttpEntity<?> deleteCategory(@PathVariable("id") Long id) {

@@ -15,7 +15,7 @@ public class Post {
     private String content;
     @Column(name = "image")
     private String image;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId")
     private Category category;
 

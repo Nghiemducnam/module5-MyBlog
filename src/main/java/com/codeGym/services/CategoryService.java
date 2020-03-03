@@ -1,6 +1,7 @@
 package com.codeGym.services;
 
 import com.codeGym.models.Category;
+import com.codeGym.models.Post;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,6 +13,7 @@ public interface CategoryService {
     void deleteCategory(Long id) throws SQLException;
     List<Category>findAllCategory();
     Optional<Category> findByCategoryId(Long id);
+
 
    
 

@@ -2,6 +2,7 @@ package com.codeGym.services.impl;
 
 import com.codeGym.models.Category;
 import com.codeGym.models.Exceptions.InvalidException;
+import com.codeGym.models.Post;
 import com.codeGym.repositories.CategoryRepository;
 import com.codeGym.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,6 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
-    @Autowired
-    private CategoryService categoryService;
 
     @Override
     public void createCategory(Category category) {
@@ -65,4 +64,6 @@ public class CategoryServiceImpl implements CategoryService {
         }
         return thisCategory;
     }
+
+
 }

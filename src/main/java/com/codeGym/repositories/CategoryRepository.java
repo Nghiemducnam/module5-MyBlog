@@ -16,4 +16,5 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
     @Query(value = "select c.category_id, c.category_name from category c where category_id = ?1", nativeQuery = true)
     Optional<Category> getCategoryById(Long category_id);
 
+
 }
